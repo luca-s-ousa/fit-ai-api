@@ -1,20 +1,44 @@
 import "dotenv/config";
 
 import Fastify from "fastify";
+import {
+  serializerCompiler,
+  validatorCompiler,
+  ZodTypeProvider,
+} from "fastify-type-provider-zod";
+import z from "zod";
 
-const fastify = Fastify({
+const app = Fastify({
   logger: true,
 });
 
-fastify.get("/", function (request, reply) {
-  reply.send({ hello: "world" });
+app.setValidatorCompiler(validatorCompiler);
+app.setSerializerCompiler(serializerCompiler);
+
+app.withTypeProvider<ZodTypeProvider>().route({
+  method: "GET",
+  url: "/",
+  schema: {
+    description: "Hello world",
+    tags: ["Hello World"],
+    response: {
+      200: z.object({
+        message: z.string(),
+      }),
+    },
+  },
+  handler: () => {
+    return {
+      message: "Hello World",
+    };
+  },
 });
 
 // Como estamos usando o ESM pode se usar o try catch sem async/await
 
 try {
-  await fastify.listen({ port: Number(process.env.PORT) || 8081 });
+  await app.listen({ port: Number(process.env.PORT) || 8081 });
 } catch (error) {
-  fastify.log.error(error);
+  app.log.error(error);
   process.exit(1);
 }
