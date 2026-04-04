@@ -107,6 +107,7 @@ export const WorkoutDayScalarFieldEnum = {
   workoutPlanId: 'workoutPlanId',
   isRest: 'isRest',
   weekDay: 'weekDay',
+  estimatedDurationInSeconds: 'estimatedDurationInSeconds',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

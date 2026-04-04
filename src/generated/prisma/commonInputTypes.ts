@@ -130,16 +130,6 @@ export type EnumweekDayFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumweekDayFilter<$PrismaModel> | $Enums.weekDay
 }
 
-export type EnumweekDayWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.weekDay | Prisma.EnumweekDayFieldRefInput<$PrismaModel>
-  in?: $Enums.weekDay[] | Prisma.ListEnumweekDayFieldRefInput<$PrismaModel>
-  notIn?: $Enums.weekDay[] | Prisma.ListEnumweekDayFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumweekDayWithAggregatesFilter<$PrismaModel> | $Enums.weekDay
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumweekDayFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumweekDayFilter<$PrismaModel>
-}
-
 export type IntFilter<$PrismaModel = never> = {
   equals?: number | Prisma.IntFieldRefInput<$PrismaModel>
   in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel>
@@ -149,6 +139,16 @@ export type IntFilter<$PrismaModel = never> = {
   gt?: number | Prisma.IntFieldRefInput<$PrismaModel>
   gte?: number | Prisma.IntFieldRefInput<$PrismaModel>
   not?: Prisma.NestedIntFilter<$PrismaModel> | number
+}
+
+export type EnumweekDayWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.weekDay | Prisma.EnumweekDayFieldRefInput<$PrismaModel>
+  in?: $Enums.weekDay[] | Prisma.ListEnumweekDayFieldRefInput<$PrismaModel>
+  notIn?: $Enums.weekDay[] | Prisma.ListEnumweekDayFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumweekDayWithAggregatesFilter<$PrismaModel> | $Enums.weekDay
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumweekDayFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumweekDayFilter<$PrismaModel>
 }
 
 export type IntWithAggregatesFilter<$PrismaModel = never> = {

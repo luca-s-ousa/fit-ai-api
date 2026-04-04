@@ -333,7 +333,7 @@ export type WorkoutExerciseCreateInput = {
   restTimeInSeconds: number
   createdAt?: Date | string
   updatedAt?: Date | string
-  workoutDay: Prisma.WorkoutDayCreateNestedOneWithoutWorkoutExercisesInput
+  workoutDay: Prisma.WorkoutDayCreateNestedOneWithoutExercisesInput
 }
 
 export type WorkoutExerciseUncheckedCreateInput = {
@@ -357,7 +357,7 @@ export type WorkoutExerciseUpdateInput = {
   restTimeInSeconds?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  workoutDay?: Prisma.WorkoutDayUpdateOneRequiredWithoutWorkoutExercisesNestedInput
+  workoutDay?: Prisma.WorkoutDayUpdateOneRequiredWithoutExercisesNestedInput
 }
 
 export type WorkoutExerciseUncheckedUpdateInput = {
@@ -507,14 +507,6 @@ export type WorkoutExerciseUncheckedUpdateManyWithoutWorkoutDayNestedInput = {
   update?: Prisma.WorkoutExerciseUpdateWithWhereUniqueWithoutWorkoutDayInput | Prisma.WorkoutExerciseUpdateWithWhereUniqueWithoutWorkoutDayInput[]
   updateMany?: Prisma.WorkoutExerciseUpdateManyWithWhereWithoutWorkoutDayInput | Prisma.WorkoutExerciseUpdateManyWithWhereWithoutWorkoutDayInput[]
   deleteMany?: Prisma.WorkoutExerciseScalarWhereInput | Prisma.WorkoutExerciseScalarWhereInput[]
-}
-
-export type IntFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
 }
 
 export type WorkoutExerciseCreateWithoutWorkoutDayInput = {
