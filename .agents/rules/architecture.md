@@ -20,7 +20,7 @@ trigger: always_on
 - Quando uma rota precisar ser protegida (acessível apenas por usuários autenticados), **SEMPRE** use o `auth.api.getSession` (@src/lib/auth.ts) para recuperar a sessão do usuário.
 - Uma rota deve **SEMPRE** instanciar e chamar um use case.
 - **SEMPRE** trate os erros lançados pelo use case.
-- **SEMPRE** inclua `tags` e `summary` no schema da rota para documentação no Swagger/OpenAPI.
+- **OBRIGATÓRIO**: **SEMPRE** inclua `tags` e `summary` no schema de **TODAS** as rotas, sem exceção. Isso é crucial para a organização e geração automática da documentação via Swagger/OpenAPI.
 
 ### Exemplo:
 
