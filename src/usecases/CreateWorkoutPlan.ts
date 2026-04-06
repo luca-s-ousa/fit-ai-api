@@ -3,7 +3,7 @@ import { weekDay } from "../generated/prisma/enums.js";
 import { prisma } from "../lib/db.js";
 
 // Data Transfer Object
-interface DTO {
+interface InputDto {
   userId: string;
   name: string;
   workoutDays: Array<{
@@ -11,6 +11,26 @@ interface DTO {
     weekDay: weekDay;
     isRest: boolean;
     estimatedDurationInSeconds: number;
+    coverImageUrl?: string;
+    exercises: Array<{
+      name: string;
+      order: number;
+      sets: number;
+      reps: number;
+      restTimeInSeconds: number;
+    }>;
+  }>;
+}
+
+interface OutputDto {
+  id: string;
+  name: string;
+  workoutDays: Array<{
+    name: string;
+    weekDay: weekDay;
+    isRest: boolean;
+    estimatedDurationInSeconds: number;
+    coverImageUrl?: string;
     exercises: Array<{
       name: string;
       order: number;
@@ -22,7 +42,7 @@ interface DTO {
 }
 
 export class CreateWorkoutPlan {
-  async execute(dto: DTO) {
+  async execute(dto: InputDto): Promise<OutputDto> {
     const existingWorkoutPlan = await prisma.workoutPlan.findFirst({
       where: {
         isAcive: true,
@@ -51,6 +71,7 @@ export class CreateWorkoutPlan {
               weekDay: workoutDay.weekDay,
               isRest: workoutDay.isRest,
               estimatedDurationInSeconds: workoutDay.estimatedDurationInSeconds,
+              coverImageUrl: workoutDay.coverImageUrl,
               exercises: {
                 create: workoutDay.exercises.map((exercise) => ({
                   name: exercise.name,
@@ -82,7 +103,24 @@ export class CreateWorkoutPlan {
         throw new NotFoundError("Workout plan not found");
       }
 
-      return result;
+      return {
+        id: result.id,
+        name: result.name,
+        workoutDays: result.workoutDays.map((day) => ({
+          name: day.name,
+          weekDay: day.weekDay,
+          isRest: day.isRest,
+          estimatedDurationInSeconds: day.estimatedDurationInSeconds,
+          coverImageUrl: day.coverImageUrl ?? undefined,
+          exercises: day.exercises.map((exercise) => ({
+            name: exercise.name,
+            order: exercise.order,
+            sets: exercise.sets,
+            reps: exercise.reps,
+            restTimeInSeconds: exercise.restTimeInSeconds,
+          })),
+        })),
+      };
     });
   }
 }
