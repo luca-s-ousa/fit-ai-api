@@ -7,6 +7,7 @@ import {
   ForbiddenError,
   NotFoundError,
   WorkoutDayAlreadyStartedError,
+  WorkoutDayIsRestError,
   WorkoutPlanNotActiveError,
 } from "../errors/index.js";
 import { auth } from "../lib/auth.js";
@@ -85,6 +86,13 @@ export const workoutPlansRoutes = async (app: FastifyInstance) => {
           });
         }
         
+        if (error instanceof WorkoutDayIsRestError) {
+          return reply.status(400).send({
+            error: error.message,
+            code: "WORKOUT_DAY_IS_REST_ERROR",
+          });
+        }
+
         if (error instanceof WorkoutDayAlreadyStartedError) {
           return reply.status(409).send({
             error: error.message,

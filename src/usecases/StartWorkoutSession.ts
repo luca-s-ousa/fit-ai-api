@@ -3,6 +3,7 @@ import {
   ForbiddenError,
   NotFoundError,
   WorkoutDayAlreadyStartedError,
+  WorkoutDayIsRestError,
   WorkoutPlanNotActiveError,
 } from "../errors/index.js";
 import { prisma } from "../lib/db.js";
@@ -44,6 +45,10 @@ export class StartWorkoutSession {
 
     if (!workoutDay.workoutPlan.isAcive) {
       throw new WorkoutPlanNotActiveError("Workout plan is not active");
+    }
+
+    if (workoutDay.isRest) {
+      throw new WorkoutDayIsRestError("Cannot start a session on a rest day");
     }
 
     if (workoutDay.sessions.length > 0) {

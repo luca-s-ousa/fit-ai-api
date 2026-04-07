@@ -25,3 +25,10 @@ export class WorkoutDayAlreadyStartedError extends Error {
     this.name = "WorkoutDayAlreadyStartedError";
   }
 }
+
+export class WorkoutDayIsRestError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "WorkoutDayIsRestError";
+  }
+}
