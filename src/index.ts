@@ -69,7 +69,7 @@ await app.register(fastifyApiReference, {
 await app.register(homeRoutes, { prefix: "/home" });
 await app.register(statsRoutes, { prefix: "/stats" });
 await app.register(workoutPlansRoutes, { prefix: "/workout-plans" });
-await app.register(aiRoutes);
+await app.register(aiRoutes, { prefix: "/ai" });
 await app.register(meRoutes, { prefix: "/me" });
 
 app.withTypeProvider<ZodTypeProvider>().route({
