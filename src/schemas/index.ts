@@ -129,3 +129,36 @@ export const GetStatsResponseSchema = z.object({
   totalTimeInSeconds: z.number(),
 });
 
+export const GetWorkoutPlansQuerySchema = z.object({
+  active: z.enum(["true", "false"]).optional(),
+});
+
+export const GetWorkoutPlansResponseSchema = z.array(
+  z.object({
+    id: z.string().uuid(),
+    name: z.string(),
+    isActive: z.boolean(),
+    workoutDays: z.array(
+      z.object({
+        id: z.string().uuid(),
+        weekDay: z.enum(weekDay),
+        name: z.string(),
+        isRest: z.boolean(),
+        coverImageUrl: z.string().optional(),
+        estimatedDurationInSeconds: z.number(),
+        exercises: z.array(
+          z.object({
+            id: z.string().uuid(),
+            name: z.string(),
+            order: z.number(),
+            workoutDayId: z.string().uuid(),
+            sets: z.number(),
+            reps: z.number(),
+            restTimeInSeconds: z.number(),
+          })
+        ),
+      })
+    ),
+  })
+);
+
