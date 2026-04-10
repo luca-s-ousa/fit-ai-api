@@ -162,3 +162,22 @@ export const GetWorkoutPlansResponseSchema = z.array(
   })
 );
 
+const UserTrainDataSchema = z.object({
+  userId: z.string(),
+  userName: z.string(),
+  weightInGrams: z.number().int().positive(),
+  heightInCentimeters: z.number().int().positive(),
+  age: z.number().int().positive(),
+  bodyFatPercentage: z.number().min(0).max(100),
+});
+
+export const UpsertUserTrainDataBodySchema = z.object({
+  weightInGrams: z.number().int().positive(),
+  heightInCentimeters: z.number().int().positive(),
+  age: z.number().int().positive(),
+  bodyFatPercentage: z.number().min(0).max(100),
+});
+
+export const GetUserTrainDataResponseSchema = UserTrainDataSchema.nullable();
+
+export const UpsertUserTrainDataResponseSchema = UserTrainDataSchema;
