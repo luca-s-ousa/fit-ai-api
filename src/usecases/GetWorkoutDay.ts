@@ -1,4 +1,3 @@
-import dayjs from "dayjs";
 import { ForbiddenError, NotFoundError } from "../errors/index.js";
 import { weekDay } from "../generated/prisma/enums.js";
 import { prisma } from "../lib/db.js";
@@ -81,8 +80,8 @@ export class GetWorkoutDay {
       sessions: workoutDay.sessions.map((session) => ({
         id: session.id,
         workoutDayId: session.workoutDayId,
-        startedAt: dayjs(session.startedAt).format("YYYY-MM-DD") ?? undefined,
-        completedAt: dayjs(session.completedAt).format("YYYY-MM-DD") ?? undefined,
+        startedAt: session.startedAt?.toISOString() ?? undefined,
+        completedAt: session.completedAt?.toISOString() ?? undefined,
       })),
     };
   }
