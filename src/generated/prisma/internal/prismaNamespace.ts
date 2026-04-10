@@ -1049,7 +1049,11 @@ export const UserScalarFieldEnum = {
   emailVerified: 'emailVerified',
   image: 'image',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  weightInGrams: 'weightInGrams',
+  heightInCentimeters: 'heightInCentimeters',
+  age: 'age',
+  bodyFatPercentage: 'bodyFatPercentage'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -1220,20 +1224,6 @@ export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
 
 
 /**
- * Reference to a field of type 'weekDay'
- */
-export type EnumweekDayFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'weekDay'>
-    
-
-
-/**
- * Reference to a field of type 'weekDay[]'
- */
-export type ListEnumweekDayFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'weekDay[]'>
-    
-
-
-/**
  * Reference to a field of type 'Int'
  */
 export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -1244,6 +1234,20 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
  * Reference to a field of type 'Int[]'
  */
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+/**
+ * Reference to a field of type 'weekDay'
+ */
+export type EnumweekDayFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'weekDay'>
+    
+
+
+/**
+ * Reference to a field of type 'weekDay[]'
+ */
+export type ListEnumweekDayFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'weekDay[]'>
     
 
 
