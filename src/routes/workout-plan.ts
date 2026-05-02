@@ -36,6 +36,7 @@ export const workoutPlansRoutes = async (app: FastifyInstance) => {
     schema: {
       tags: ["Workout Plan"],
       summary: "Start a workout session",
+      operationId: "startWorkoutSession",
       params: z.object({
         workoutPlanId: z.string().uuid(),
         workoutDayId: z.string().uuid(),
@@ -124,6 +125,7 @@ export const workoutPlansRoutes = async (app: FastifyInstance) => {
     schema: {
       tags: ["Workout Plan"],
       summary: "Update a workout session",
+      operationId: "updateWorkoutSession",
       params: z.object({
         workoutPlanId: z.uuid(),
         workoutDayId: z.uuid(),
@@ -194,6 +196,7 @@ export const workoutPlansRoutes = async (app: FastifyInstance) => {
     schema: {
       tags: ["Workout Plan"],
       summary: "Create a workout plan",
+      operationId: "createWorkoutPlan",
       body: WorkoutPlanSchema.omit({ id: true }),
       response: {
         201: WorkoutPlanSchema,
@@ -248,6 +251,7 @@ export const workoutPlansRoutes = async (app: FastifyInstance) => {
     schema: {
       tags: ["Workout Plan"],
       summary: "Get a workout plan by id",
+      operationId: "getWorkoutPlanById",
       params: z.object({
         id: z.string().uuid(),
       }),
@@ -311,6 +315,7 @@ export const workoutPlansRoutes = async (app: FastifyInstance) => {
     schema: {
       tags: ["Workout Plan"],
       summary: "Get a workout day by id",
+      operationId: "getWorkoutDayById",
       params: z.object({
         workoutPlanId: z.string().uuid(),
         workoutDayId: z.string().uuid(),
@@ -376,6 +381,7 @@ export const workoutPlansRoutes = async (app: FastifyInstance) => {
     schema: {
       tags: ["Workout Plan"],
       summary: "List workout plans",
+      operationId: "getWorkoutPlans",
       querystring: GetWorkoutPlansQuerySchema,
       response: {
         200: GetWorkoutPlansResponseSchema,

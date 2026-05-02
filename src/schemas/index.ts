@@ -46,23 +46,25 @@ export const UpdateWorkoutSessionResponseSchema = z.object({
 
 export const HomeResponseSchema = z.object({
   activeWorkoutPlanId: z.uuid(),
-  todayWorkoutDay: z.object({
-    workoutPlanId: z.uuid(),
-    id: z.uuid(),
-    name: z.string(),
-    isRest: z.boolean(),
-    weekDay: z.enum(weekDay),
-    estimatedDurationInSeconds: z.number(),
-    coverImageUrl: z.string().optional(),
-    exercisesCount: z.number(),
-  }),
+  todayWorkoutDay: z
+    .object({
+      workoutPlanId: z.uuid(),
+      id: z.uuid(),
+      name: z.string(),
+      isRest: z.boolean(),
+      weekDay: z.enum(weekDay),
+      estimatedDurationInSeconds: z.number(),
+      coverImageUrl: z.string().optional(),
+      exercisesCount: z.number(),
+    })
+    .optional(),
   workoutStreak: z.number(),
   consistencyByDay: z.record(
     z.iso.date(),
     z.object({
       workoutDayCompleted: z.boolean(),
       workoutDayStarted: z.boolean(),
-    })
+    }),
   ),
 });
 
@@ -78,7 +80,7 @@ export const GetWorkoutPlanResponseSchema = z.object({
       coverImageUrl: z.string().optional(),
       estimatedDurationInSeconds: z.number(),
       exercisesCount: z.number(),
-    })
+    }),
   ),
 });
 
@@ -97,7 +99,7 @@ export const GetWorkoutDayResponseSchema = z.object({
       sets: z.number(),
       reps: z.number(),
       restTimeInSeconds: z.number(),
-    })
+    }),
   ),
   weekDay: z.enum(weekDay),
   sessions: z.array(
@@ -106,7 +108,7 @@ export const GetWorkoutDayResponseSchema = z.object({
       workoutDayId: z.string().uuid(),
       startedAt: z.iso.datetime().optional(),
       completedAt: z.iso.datetime().optional(),
-    })
+    }),
   ),
 });
 
@@ -122,7 +124,7 @@ export const GetStatsResponseSchema = z.object({
     z.object({
       workoutDayCompleted: z.boolean(),
       workoutDayStarted: z.boolean(),
-    })
+    }),
   ),
   completedWorkoutsCount: z.number(),
   conclusionRate: z.number(),
@@ -155,11 +157,11 @@ export const GetWorkoutPlansResponseSchema = z.array(
             sets: z.number(),
             reps: z.number(),
             restTimeInSeconds: z.number(),
-          })
+          }),
         ),
-      })
+      }),
     ),
-  })
+  }),
 );
 
 const UserTrainDataSchema = z.object({
