@@ -1,3 +1,5 @@
+import "dotenv/config";
+
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 // Criar rotas de autenticacao no Swagger
@@ -5,13 +7,23 @@ import { openAPI } from "better-auth/plugins";
 
 import { prisma } from "./db.js";
 
+const getRequiredEnv = (name: string) => {
+  const value = process.env[name];
+
+  if (!value) {
+    throw new Error(`Missing required environment variable: ${name}`);
+  }
+
+  return value;
+};
+
 export const auth = betterAuth({
-  baseURL: process.env.BETTER_AUTH_URL,
+  baseURL: getRequiredEnv("BETTER_AUTH_URL"),
   trustedOrigins: ["http://localhost:3000", "http://localhost:8081"],
   socialProviders: {
     google: {
-      clientId: process.env.GOOGLE_CLIENT_ID as string,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+      clientId: getRequiredEnv("GOOGLE_CLIENT_ID"),
+      clientSecret: getRequiredEnv("GOOGLE_CLIENT_SECRET"),
     },
   },
   database: prismaAdapter(prisma, {
