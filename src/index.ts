@@ -13,11 +13,11 @@ import {
 import z from "zod";
 
 import { auth } from "./lib/auth.js";
+import { aiRoutes } from "./routes/ai.js";
 import { homeRoutes } from "./routes/home.js";
+import { meRoutes } from "./routes/me.js";
 import { statsRoutes } from "./routes/stats.js";
 import { workoutPlansRoutes } from "./routes/workout-plan.js";
-import { aiRoutes } from "./routes/ai.js";
-import { meRoutes } from "./routes/me.js";
 
 const app = Fastify({
   logger: true,

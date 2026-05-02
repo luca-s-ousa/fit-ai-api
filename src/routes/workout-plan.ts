@@ -13,19 +13,19 @@ import {
 import { auth } from "../lib/auth.js";
 import {
   ErrorSchema,
+  GetWorkoutDayResponseSchema,
+  GetWorkoutPlanResponseSchema,
+  GetWorkoutPlansQuerySchema,
+  GetWorkoutPlansResponseSchema,
   StartWorkoutSessionResponseSchema,
   UpdateWorkoutSessionBodySchema,
   UpdateWorkoutSessionResponseSchema,
   WorkoutPlanSchema,
-  GetWorkoutPlanResponseSchema,
-  GetWorkoutDayResponseSchema,
-  GetWorkoutPlansQuerySchema,
-  GetWorkoutPlansResponseSchema,
 } from "../schemas/index.js";
 import { CreateWorkoutPlan } from "../usecases/CreateWorkoutPlan.js";
-import { GetWorkoutPlans } from "../usecases/GetWorkoutPlans.js";
-import { GetWorkoutPlan } from "../usecases/GetWorkoutPlan.js";
 import { GetWorkoutDay } from "../usecases/GetWorkoutDay.js";
+import { GetWorkoutPlan } from "../usecases/GetWorkoutPlan.js";
+import { GetWorkoutPlans } from "../usecases/GetWorkoutPlans.js";
 import { StartWorkoutSession } from "../usecases/StartWorkoutSession.js";
 import { UpdateWorkoutSession } from "../usecases/UpdateWorkoutSession.js";
 
@@ -81,21 +81,21 @@ export const workoutPlansRoutes = async (app: FastifyInstance) => {
             code: "NOT_FOUND_ERROR",
           });
         }
-        
+
         if (error instanceof ForbiddenError) {
           return reply.status(403).send({
             error: error.message,
             code: "FORBIDDEN_ERROR",
           });
         }
-        
+
         if (error instanceof WorkoutPlanNotActiveError) {
           return reply.status(400).send({
             error: error.message,
             code: "WORKOUT_PLAN_NOT_ACTIVE_ERROR",
           });
         }
-        
+
         if (error instanceof WorkoutDayIsRestError) {
           return reply.status(400).send({
             error: error.message,
@@ -172,7 +172,7 @@ export const workoutPlansRoutes = async (app: FastifyInstance) => {
             code: "NOT_FOUND_ERROR",
           });
         }
-        
+
         if (error instanceof ForbiddenError) {
           return reply.status(403).send({
             error: error.message,
@@ -399,7 +399,8 @@ export const workoutPlansRoutes = async (app: FastifyInstance) => {
         const getWorkoutPlans = new GetWorkoutPlans();
 
         const activeParam = request.query.active;
-        const active = activeParam !== undefined ? activeParam === "true" : undefined;
+        const active =
+          activeParam !== undefined ? activeParam === "true" : undefined;
 
         const result = await getWorkoutPlans.execute({
           userId: session.user.id,
