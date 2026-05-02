@@ -11,6 +11,7 @@ export const meRoutes = async (app) => {
         schema: {
             tags: ["Me"],
             summary: "Get my training data",
+            operationId: "getMyTrainingData",
             response: {
                 200: GetUserTrainDataResponseSchema,
                 401: ErrorSchema,
@@ -49,6 +50,7 @@ export const meRoutes = async (app) => {
         schema: {
             tags: ["Me"],
             summary: "Upsert my training data",
+            operationId: "upsertMyTrainingData",
             body: UpsertUserTrainDataBodySchema,
             response: {
                 200: UpsertUserTrainDataResponseSchema,

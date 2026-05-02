@@ -35,7 +35,8 @@ export const UpdateWorkoutSessionResponseSchema = z.object({
 });
 export const HomeResponseSchema = z.object({
     activeWorkoutPlanId: z.uuid(),
-    todayWorkoutDay: z.object({
+    todayWorkoutDay: z
+        .object({
         workoutPlanId: z.uuid(),
         id: z.uuid(),
         name: z.string(),
@@ -44,7 +45,8 @@ export const HomeResponseSchema = z.object({
         estimatedDurationInSeconds: z.number(),
         coverImageUrl: z.string().optional(),
         exercisesCount: z.number(),
-    }),
+    })
+        .optional(),
     workoutStreak: z.number(),
     consistencyByDay: z.record(z.iso.date(), z.object({
         workoutDayCompleted: z.boolean(),

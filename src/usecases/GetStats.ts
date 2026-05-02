@@ -2,6 +2,7 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc.js";
 
 import { prisma } from "../lib/db.js";
+import { calculateWorkoutStreak } from "../lib/workout-streak.js";
 
 dayjs.extend(utc);
 
@@ -89,24 +90,12 @@ export class GetStats {
       },
     });
 
-    let streak = 0;
+    let workoutStreak = 0;
     if (activePlan) {
-      const weekdaysMapping = [
-        "SUNDAY",
-        "MONDAY",
-        "TUESDAY",
-        "WEDNESDAY",
-        "THURSDAY",
-        "FRIDAY",
-        "SATURDAY",
-      ];
-
-      const allCompletedSessions = await prisma.workoutSession.findMany({
+      const completedSessions = await prisma.workoutSession.findMany({
         where: {
           workoutDay: {
-            workoutPlan: {
-              userId: userId,
-            },
+            workoutPlanId: activePlan.id,
           },
           completedAt: {
             not: null,
@@ -117,47 +106,15 @@ export class GetStats {
         },
       });
 
-      const completedDatesSet = new Set(
-        allCompletedSessions.map((s) =>
-          dayjs.utc(s.startedAt).format("YYYY-MM-DD"),
-        ),
-      );
-
-      let checkDate = dayjs.utc();
-      let loopCount = 0;
-
-      const todayStr = checkDate.format("YYYY-MM-DD");
-      const currentWeekDay = weekdaysMapping[checkDate.day()];
-      const isRestToday =
-        activePlan.workoutDays.find((d) => d.weekDay === currentWeekDay)
-          ?.isRest ?? false;
-
-      if (completedDatesSet.has(todayStr) || isRestToday) {
-        streak++;
-        checkDate = checkDate.subtract(1, "day");
-      } else {
-        checkDate = checkDate.subtract(1, "day");
-      }
-
-      while (loopCount < 365) {
-        loopCount++;
-        const dateStr = checkDate.format("YYYY-MM-DD");
-        const weekdayStr = weekdaysMapping[checkDate.day()];
-        const isRest =
-          activePlan.workoutDays.find((d) => d.weekDay === weekdayStr)
-            ?.isRest ?? false;
-
-        if (completedDatesSet.has(dateStr) || isRest) {
-          streak++;
-          checkDate = checkDate.subtract(1, "day");
-        } else {
-          break;
-        }
-      }
+      workoutStreak = calculateWorkoutStreak({
+        referenceDate: dayjs.utc().format("YYYY-MM-DD"),
+        workoutDays: activePlan.workoutDays,
+        completedSessions,
+      });
     }
 
     return {
-      workoutStreak: streak,
+      workoutStreak,
       consistencyByDay,
       completedWorkoutsCount,
       conclusionRate,

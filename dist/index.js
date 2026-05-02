@@ -90,6 +90,9 @@ app.withTypeProvider().route({
 app.route({
     method: ["GET", "POST"],
     url: "/api/auth/*",
+    schema: {
+        hide: true,
+    },
     async handler(request, reply) {
         try {
             // Construct request URL

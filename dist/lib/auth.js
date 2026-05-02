@@ -14,6 +14,9 @@ const getRequiredEnv = (name) => {
 export const auth = betterAuth({
     baseURL: getRequiredEnv("BETTER_AUTH_URL"),
     trustedOrigins: ["http://localhost:3000", "http://localhost:8081"],
+    emailAndPassword: {
+        enabled: true,
+    },
     socialProviders: {
         google: {
             clientId: getRequiredEnv("GOOGLE_CLIENT_ID"),

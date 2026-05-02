@@ -1,5 +1,5 @@
 import { google } from "@ai-sdk/google";
-import { convertToModelMessages, stepCountIs, streamText, tool } from "ai";
+import { convertToModelMessages, stepCountIs, streamText, tool, } from "ai";
 import { fromNodeHeaders } from "better-auth/node";
 import z from "zod";
 import { weekDay } from "../generated/prisma/enums.js";
@@ -80,7 +80,8 @@ export const aiRoutes = async (app) => {
             },
         },
         handler: async (request, reply) => {
-            const messages = request.body.messages;
+            const messages = request.body
+                .messages;
             const session = await auth.api.getSession({
                 headers: fromNodeHeaders(request.headers),
             });
@@ -107,14 +108,30 @@ export const aiRoutes = async (app) => {
                     updateUserTrainData: tool({
                         description: "Cria ou atualiza os dados de perfil e medidas do usuário autenticado.",
                         inputSchema: z.object({
-                            weightInGrams: z.number().int().positive().describe("Peso em gramas (ex: 75kg = 75000)"),
-                            heightInCentimeters: z.number().int().positive().describe("Altura em centímetros (ex: 175)"),
+                            weightInGrams: z
+                                .number()
+                                .int()
+                                .positive()
+                                .describe("Peso em gramas (ex: 75kg = 75000)"),
+                            heightInCentimeters: z
+                                .number()
+                                .int()
+                                .positive()
+                                .describe("Altura em centímetros (ex: 175)"),
                             age: z.number().int().positive().describe("Idade em anos"),
-                            bodyFatPercentage: z.number().int().min(0).max(100).describe("Percentual de gordura corporal, inteiro de 0 a 100 (ex: 15 para 15%)"),
+                            bodyFatPercentage: z
+                                .number()
+                                .int()
+                                .min(0)
+                                .max(100)
+                                .describe("Percentual de gordura corporal, inteiro de 0 a 100 (ex: 15 para 15%)"),
                         }),
                         execute: async (input) => {
                             const usecase = new UpsertUserTrainData();
-                            return await usecase.execute({ userId: session.user.id, ...input });
+                            return await usecase.execute({
+                                userId: session.user.id,
+                                ...input,
+                            });
                         },
                     }),
                     // @ts-ignore
@@ -130,21 +147,57 @@ export const aiRoutes = async (app) => {
                     createWorkoutPlan: tool({
                         description: "Cria um novo plano de treino completo com exatamente 7 dias (MONDAY a SUNDAY). Dias de descanso devem ter isRest: true, exercises: [] e estimatedDurationInSeconds: 0.",
                         inputSchema: z.object({
-                            name: z.string().trim().min(1).describe("Nome do plano de treino"),
+                            name: z
+                                .string()
+                                .trim()
+                                .min(1)
+                                .describe("Nome do plano de treino"),
                             workoutDays: z
                                 .array(z.object({
-                                name: z.string().trim().min(1).describe("Nome descritivo do dia (ex: 'Superior A - Peito e Costas', 'Descanso')"),
-                                weekDay: z.enum(weekDay).describe("Dia da semana (MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY)"),
+                                name: z
+                                    .string()
+                                    .trim()
+                                    .min(1)
+                                    .describe("Nome descritivo do dia (ex: 'Superior A - Peito e Costas', 'Descanso')"),
+                                weekDay: z
+                                    .enum(weekDay)
+                                    .describe("Dia da semana (MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY)"),
                                 isRest: z.boolean().describe("Se é dia de descanso"),
-                                estimatedDurationInSeconds: z.number().min(0).describe("Duração estimada em segundos (0 para dias de descanso)"),
-                                coverImageUrl: z.string().url().describe("URL da imagem de capa do dia de treino"),
+                                estimatedDurationInSeconds: z
+                                    .number()
+                                    .min(0)
+                                    .describe("Duração estimada em segundos (0 para dias de descanso)"),
+                                coverImageUrl: z
+                                    .string()
+                                    .url()
+                                    .describe("URL da imagem de capa do dia de treino"),
                                 exercises: z
                                     .array(z.object({
-                                    name: z.string().trim().min(1).describe("Nome do exercício"),
-                                    order: z.number().int().min(0).describe("Ordem de execução (começa em 0)"),
-                                    sets: z.number().int().min(1).describe("Número de séries"),
-                                    reps: z.number().int().min(1).describe("Número de repetições por série"),
-                                    restTimeInSeconds: z.number().int().min(0).describe("Tempo de descanso entre séries em segundos"),
+                                    name: z
+                                        .string()
+                                        .trim()
+                                        .min(1)
+                                        .describe("Nome do exercício"),
+                                    order: z
+                                        .number()
+                                        .int()
+                                        .min(0)
+                                        .describe("Ordem de execução (começa em 0)"),
+                                    sets: z
+                                        .number()
+                                        .int()
+                                        .min(1)
+                                        .describe("Número de séries"),
+                                    reps: z
+                                        .number()
+                                        .int()
+                                        .min(1)
+                                        .describe("Número de repetições por série"),
+                                    restTimeInSeconds: z
+                                        .number()
+                                        .int()
+                                        .min(0)
+                                        .describe("Tempo de descanso entre séries em segundos"),
                                 }))
                                     .describe("Lista de exercícios do dia (vazia para dias de descanso)"),
                             }))

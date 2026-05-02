@@ -4,6 +4,7 @@ import utc from "dayjs/plugin/utc.js";
 import { NotFoundError } from "../errors/index.js";
 import { weekDay } from "../generated/prisma/enums.js";
 import { prisma } from "../lib/db.js";
+import { calculateWorkoutStreak } from "../lib/workout-streak.js";
 
 dayjs.extend(utc);
 
@@ -125,14 +126,10 @@ export class GetHomeData {
       }
     }
 
-    // 4. Calcular workoutStreak
-    // Pegar todas as sessões completadas do usuário (ordenadas por data)
-    const allCompletedSessions = await prisma.workoutSession.findMany({
+    const completedSessions = await prisma.workoutSession.findMany({
       where: {
         workoutDay: {
-          workoutPlan: {
-            userId: userId,
-          },
+          workoutPlanId: activePlan.id,
         },
         completedAt: {
           not: null,
@@ -143,48 +140,16 @@ export class GetHomeData {
       },
     });
 
-    const completedDatesSet = new Set(
-      allCompletedSessions.map((s) =>
-        dayjs.utc(s.startedAt).format("YYYY-MM-DD"),
-      ),
-    );
-
-    let streak = 0;
-    let checkDate = queryDate;
-    let loopCount = 0;
-
-    // Checar hoje primeiro
-    const todayStr = checkDate.format("YYYY-MM-DD");
-    if (completedDatesSet.has(todayStr) || todayWorkoutDayRecord?.isRest) {
-      streak++;
-      checkDate = checkDate.subtract(1, "day");
-    } else {
-      // Se hoje não treinou ainda (e não é descanso),
-      // a sequência pode não ter quebrado caso tenha treinado ontem.
-      checkDate = checkDate.subtract(1, "day");
-    }
-
-    // Continuar checando para trás
-    while (loopCount < 365) {
-      loopCount++;
-      const dateStr = checkDate.format("YYYY-MM-DD");
-      const weekdayStr = weekdaysMapping[checkDate.day()];
-      const isRest =
-        activePlan.workoutDays.find((d) => d.weekDay === weekdayStr)?.isRest ??
-        false;
-
-      if (completedDatesSet.has(dateStr) || isRest) {
-        streak++;
-        checkDate = checkDate.subtract(1, "day");
-      } else {
-        break;
-      }
-    }
+    const workoutStreak = calculateWorkoutStreak({
+      referenceDate: date,
+      workoutDays: activePlan.workoutDays,
+      completedSessions,
+    });
 
     return {
       activeWorkoutPlanId: activePlan.id,
       todayWorkoutDay,
-      workoutStreak: streak,
+      workoutStreak,
       consistencyByDay,
     };
   }
